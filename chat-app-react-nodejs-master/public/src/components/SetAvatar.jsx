@@ -44,7 +44,7 @@ export default function SetAvatar() {
       console.error("Error fetching avatars:", error);
       toast.error("Error fetching avatars. Please try again.", toastOptions);
     }
-  }, [api]);
+  }, [api, toastOptions]);  // Include toastOptions in dependency array
 
   // Effect that fetches avatars
   useEffect(() => {
