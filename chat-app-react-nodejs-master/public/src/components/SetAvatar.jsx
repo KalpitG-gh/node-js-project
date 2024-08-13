@@ -44,7 +44,7 @@ export default function SetAvatar() {
       console.error("Error fetching avatars:", error);
       toast.error("Error fetching avatars. Please try again.", toastOptions);
     }
-  }, [api, toast, toastOptions]);
+  }, [api]);
 
   // Effect that fetches avatars
   useEffect(() => {
@@ -84,89 +84,77 @@ export default function SetAvatar() {
       ) : (
         <>
           <div className="title-container">
-            <h1>Pick an Avatar as your profile picture</h1>
+            <h1>Pick an avatar as your profile picture</h1>
           </div>
           <div className="avatars">
             {avatars.map((avatar, index) => (
               <div
                 key={index}
-                className={`avatar ${selectedAvatar === index ? "selected" : ""}`}
-                onClick={() => setSelectedAvatar(index)}
+                className={`avatar ${
+                  selectedAvatar === index ? "selected" : ""
+                }`}
               >
                 <img
                   src={`data:image/svg+xml;base64,${avatar}`}
                   alt="avatar"
+                  onClick={() => setSelectedAvatar(index)}
                 />
               </div>
             ))}
           </div>
-          <button onClick={setProfilePicture} className="submit-btn">
+          <button className="submit-btn" onClick={setProfilePicture}>
             Set as Profile Picture
           </button>
-          <ToastContainer />
         </>
       )}
+      <ToastContainer />
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  justify-content: center;
-  align-items: center;
   flex-direction: column;
-  gap: 3rem;
-  background-color: #131324;
-  height: 100vh;
-  width: 100vw;
-
-  .loader {
-    max-inline-size: 100%;
-  }
-
+  align-items: center;
+  gap: 2rem;
   .title-container {
     h1 {
       color: white;
     }
   }
-
   .avatars {
     display: flex;
-    gap: 2rem;
-
+    gap: 1rem;
     .avatar {
       border: 0.4rem solid transparent;
-      padding: 0.4rem;
-      border-radius: 5rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      transition: 0.5s ease-in-out;
-
+      border-radius: 50%;
+      padding: 0.2rem;
+      cursor: pointer;
       img {
         height: 6rem;
-        transition: 0.5s ease-in-out;
+        width: 6rem;
+        border-radius: 50%;
+      }
+      &.selected {
+        border: 0.4rem solid #4e0eff;
       }
     }
-
-    .selected {
-      border: 0.4rem solid #4e0eff;
-    }
   }
-
   .submit-btn {
     background-color: #4e0eff;
     color: white;
-    padding: 1rem 2rem;
+    padding: 0.5rem 2rem;
     border: none;
-    font-weight: bold;
+    border-radius: 0.5rem;
     cursor: pointer;
-    border-radius: 0.4rem;
     font-size: 1rem;
-    text-transform: uppercase;
-
+    transition: background-color 0.3s ease;
     &:hover {
-      background-color: #4e0eff;
+      background-color: #4e0eff88;
     }
+  }
+  .loader {
+    width: 10rem;
+    height: 10rem;
   }
 `;
