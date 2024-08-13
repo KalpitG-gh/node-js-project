@@ -60,6 +60,17 @@ export default function ChatContainer({ currentChat, socket }) {
     scrollRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Clean up socket connection effect
+  useEffect(() => {
+    const socketRef = socket.current;
+  
+    return () => {
+      if (socketRef) {
+        socketRef.disconnect();
+      }
+    };
+  }, [socket]);
+
   // Send message function
   const handleSendMsg = useCallback(async (msg) => {
     try {
