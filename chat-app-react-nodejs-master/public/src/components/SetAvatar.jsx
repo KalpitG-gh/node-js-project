@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import loader from "../assets/loader.gif";
@@ -30,7 +30,8 @@ export default function SetAvatar() {
     checkAuth();
   }, [navigate]);
 
-  const fetchAvatars = async () => {
+  // Wrap fetchAvatars with useCallback
+  const fetchAvatars = useCallback(async () => {
     try {
       const data = [];
       for (let i = 0; i < 4; i++) {
@@ -43,11 +44,12 @@ export default function SetAvatar() {
       console.error("Error fetching avatars:", error);
       toast.error("Error fetching avatars. Please try again.", toastOptions);
     }
-  };
+  }, [api, toast, toastOptions]);
 
+  // Effect that fetches avatars
   useEffect(() => {
     fetchAvatars();
-  }, []);
+  }, [fetchAvatars]);
 
   const setProfilePicture = async () => {
     if (selectedAvatar === undefined) {
