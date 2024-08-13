@@ -37,13 +37,14 @@ export default function ChatContainer({ currentChat, socket }) {
       setArrivalMessage({ fromSelf: false, message: msg });
     };
 
-    if (socket.current) {
-      socket.current.on("msg-recieve", handleIncomingMessage);
+    const socketRef = socket.current;
+    if (socketRef) {
+      socketRef.on("msg-recieve", handleIncomingMessage);
     }
 
     return () => {
-      if (socket.current) {
-        socket.current.off("msg-recieve", handleIncomingMessage);
+      if (socketRef) {
+        socketRef.off("msg-recieve", handleIncomingMessage);
       }
     };
   }, [socket]);
@@ -63,7 +64,7 @@ export default function ChatContainer({ currentChat, socket }) {
   // Clean up socket connection effect
   useEffect(() => {
     const socketRef = socket.current;
-  
+
     return () => {
       if (socketRef) {
         socketRef.disconnect();
