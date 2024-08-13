@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useMemo } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import loader from "../assets/loader.gif";
@@ -13,13 +13,15 @@ export default function SetAvatar() {
   const [avatars, setAvatars] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [selectedAvatar, setSelectedAvatar] = useState(undefined);
-  const toastOptions = {
+
+  // Memoize toastOptions to prevent unnecessary re-renders
+  const toastOptions = useMemo(() => ({
     position: "bottom-right",
     autoClose: 8000,
     pauseOnHover: true,
     draggable: true,
     theme: "dark",
-  };
+  }), []);
 
   useEffect(() => {
     const checkAuth = () => {
