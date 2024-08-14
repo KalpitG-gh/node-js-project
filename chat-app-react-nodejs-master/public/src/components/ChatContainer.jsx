@@ -16,19 +16,19 @@ export default function ChatContainer({ currentChat, socket }) {
     const fetchMessages = async () => {
       try {
         const data = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
-        const response = await axios.post(recieveMessageRoute, {
-          from: data._id,
-          to: currentChat._id,
-        });
-        setMessages(response.data);
+        if (data && currentChat) {
+          const response = await axios.post(recieveMessageRoute, {
+            from: data._id,
+            to: currentChat._id,
+          });
+          setMessages(response.data);
+        }
       } catch (error) {
         console.error("Error fetching messages:", error);
       }
     };
 
-    if (currentChat) {
-      fetchMessages();
-    }
+    fetchMessages();
   }, [currentChat]);
 
   // Handle incoming messages effect
@@ -76,18 +76,20 @@ export default function ChatContainer({ currentChat, socket }) {
   const handleSendMsg = useCallback(async (msg) => {
     try {
       const data = JSON.parse(localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY));
-      socket.current.emit("send-msg", {
-        to: currentChat._id,
-        from: data._id,
-        msg,
-      });
-      await axios.post(sendMessageRoute, {
-        from: data._id,
-        to: currentChat._id,
-        message: msg,
-      });
+      if (data && currentChat) {
+        socket.current.emit("send-msg", {
+          to: currentChat._id,
+          from: data._id,
+          msg,
+        });
+        await axios.post(sendMessageRoute, {
+          from: data._id,
+          to: currentChat._id,
+          message: msg,
+        });
 
-      setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
+        setMessages((prev) => [...prev, { fromSelf: true, message: msg }]);
+      }
     } catch (error) {
       console.error("Error sending message:", error);
     }
